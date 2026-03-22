@@ -1,32 +1,51 @@
 import yt_dlp
 import os
+import glob
+from flask import Flask, request, jsonify, send_file
+
+app = Flask(__name__)
 
 
-def download_short(url: str, output_path: str = "./downloads") -> bool:
+def download_short(url: str, output_path: str = "./downloads") -> str | None:
     try:
         os.makedirs(output_path, exist_ok=True)
 
         options = {
             "outtmpl": f"{output_path}/%(title)s.%(ext)s",
-            "format": "best[ext=mp4]/best",  # 👈 single format, no merging needed
+            "format": "best[ext=mp4]/best",
             "quiet": False,
         }
 
         with yt_dlp.YoutubeDL(options) as ydl:
             ydl.download([url])
 
-        return True
+        # Get the downloaded file path
+        files = glob.glob(f"{output_path}/*.mp4")
+        return max(files, key=os.path.getctime) if files else None  # return latest file
 
     except Exception as e:
         print(f"Download failed: {e}")
-        return False
+        return None
 
 
-def main():
-    video_id = input("Enter YouTube Shorts Video ID: ").strip()
+@app.route("/download", methods=["GET"])
+def download():
+    video_id = request.args.get("video_id")
+
+    if not video_id:
+        return jsonify({"status": "error", "message": "video_id is required"}), 400
+
     url = f"https://www.youtube.com/shorts/{video_id}"
-    download_short(url, "./downloads")
+    file_path = download_short(url, "./downloads")
+
+    if file_path:
+        return send_file(
+            file_path,
+            as_attachment=True,  # 👈 this triggers browser download
+        )
+    else:
+        return jsonify({"status": "error", "message": "Download failed"}), 500
 
 
 if __name__ == "__main__":
-    main()
+    app.run(debug=True, port=8080)
