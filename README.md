@@ -122,3 +122,19 @@ python main.py
 ```
 
 The Flask development server includes hot-reloading capabilities.
+
+## Docker
+
+Build the Docker image:
+
+```bash
+docker build -t video-downloader:latest .
+```
+
+Run the container (maps container port 8080 to host port 8080):
+
+```bash
+docker run --rm -p 8080:8080 --name video-downloader video-downloader:latest
+```
+
+Then call the API at `http://localhost:8080/download?video_id=<videoID>`.
