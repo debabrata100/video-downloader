@@ -1,6 +1,9 @@
-# YouTube Shorts Downloader
+# YouTube Video Downloader
 
 A Flask-based REST API for downloading YouTube Shorts videos with a simple HTTP interface.
+
+## How to download
+http://localhost:8080/download?video_id=<videoID>
 
 ## Overview
 
@@ -119,3 +122,27 @@ python main.py
 ```
 
 The Flask development server includes hot-reloading capabilities.
+
+## Docker
+
+Build the Docker image:
+
+```bash
+docker build -t video-downloader:latest .
+```
+
+Run the container (maps container port 8080 to host port 8080):
+
+```bash
+docker run --rm -p 8080:8080 --name video-downloader video-downloader:latest
+```
+
+Then call the API at `http://localhost:8080/download?video_id=<videoID>`.
+
+### GitHub Actions CI/CD
+
+This repository includes a GitHub Actions workflow to build and publish the Docker image to Docker Hub on every push to `main`.
+
+Set these repository secrets in GitHub:
+- `DOCKER_USERNAME` = `debabrata100`
+- `DOCKER_PASSWORD` = your Docker Hub access token or password
