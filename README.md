@@ -138,3 +138,11 @@ docker run --rm -p 8080:8080 --name video-downloader video-downloader:latest
 ```
 
 Then call the API at `http://localhost:8080/download?video_id=<videoID>`.
+
+### GitHub Actions CI/CD
+
+This repository includes a GitHub Actions workflow to build and publish the Docker image to Docker Hub on every push to `main`.
+
+Set these repository secrets in GitHub:
+- `DOCKER_USERNAME` = `debabrata100`
+- `DOCKER_PASSWORD` = your Docker Hub access token or password
