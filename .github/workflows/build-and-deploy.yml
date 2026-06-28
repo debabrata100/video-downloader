@@ -1,4 +1,4 @@
-name: Build and Publish Docker Image
+name: Build, Publish Docker Image, and Deploy to Render
 
 on:
   push:
@@ -31,3 +31,11 @@ jobs:
           tags: |
             debabrata100/video-downloader:latest
             debabrata100/video-downloader:${{ github.sha }}
+
+  deploy-to-render:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Render deploy
+        run: |
+          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
