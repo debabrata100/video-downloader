@@ -1,8 +1,9 @@
-# Access deployed applicatin at
-`https://video-downloader-p5gn.onrender.com`
-# YouTube Shorts Downloader
+# YouTube Video Downloader
 
 A Flask-based REST API for downloading YouTube Shorts videos with a simple HTTP interface.
+
+## How to download
+http://localhost:8080/download?video_id=<videoID>
 
 ## Overview
 
