@@ -141,8 +141,17 @@ Then call the API at `http://localhost:8080/download?video_id=<videoID>`.
 
 ### GitHub Actions CI/CD
 
-This repository includes a GitHub Actions workflow to build and publish the Docker image to Docker Hub on every push to `main`.
+This repository includes a GitHub Actions workflow to build and publish the Docker image to Docker Hub on every push to `master`.
 
 Set these repository secrets in GitHub:
 - `DOCKER_USERNAME` = `debabrata100`
 - `DOCKER_PASSWORD` = your Docker Hub access token or password
+- `RENDER_DEPLOY_HOOK_URL` = your Render deploy hook URL
+
+### Render deployment
+
+You can deploy this app to Render using the included [render.yaml](render.yaml) file.
+
+1. Create a new Web Service on Render and connect this repository.
+2. Render will use the `render.yaml` configuration automatically.
+3. Add the `RENDER_DEPLOY_HOOK_URL` secret in GitHub to trigger deployments from pushes to `master`.

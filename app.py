@@ -6,6 +6,10 @@ from flask import Flask, request, jsonify, send_file
 app = Flask(__name__)
 
 
+def get_port() -> int:
+    return int(os.environ.get("PORT", "8080"))
+
+
 def download_short(url: str, output_path: str = "/tmp/downloads") -> str | None:
     try:
         os.makedirs(output_path, exist_ok=True)  # 👈 use /tmp on servers
@@ -27,6 +31,11 @@ def download_short(url: str, output_path: str = "/tmp/downloads") -> str | None:
         return None
 
 
+@app.route("/health", methods=["GET"])
+def health():
+    return jsonify({"status": "ok"}), 200
+
+
 @app.route("/download", methods=["GET"])
 def download():
     video_id = request.args.get("video_id")
@@ -44,4 +53,4 @@ def download():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080, debug=False)
+    app.run(host="0.0.0.0", port=get_port(), debug=False)
